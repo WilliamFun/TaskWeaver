@@ -14,6 +14,7 @@ from taskweaver.llm.base import (
 )
 from taskweaver.llm.google_genai import GoogleGenAIService
 from taskweaver.llm.groq import GroqService, GroqServiceConfig
+from taskweaver.llm.harvestai import HarvestService
 from taskweaver.llm.mock import MockApiService
 from taskweaver.llm.ollama import OllamaService
 from taskweaver.llm.openai import OpenAIService
@@ -35,6 +36,7 @@ llm_completion_config_map = {
     "zhipuai": ZhipuAIService,
     "groq": GroqService,
     "anthropic": AnthropicService,
+    "harvest": HarvestService,
 }
 
 # TODO
@@ -70,6 +72,8 @@ class LLMApi(object):
             self._set_completion_service(GroqService)
         elif self.config.api_type == "anthropic":  # Add support for Anthropic
             self._set_completion_service(AnthropicService)
+        elif self.config.api_type == "harvest":
+            self._set_completion_service(HarvestService)
         else:
             raise ValueError(f"API type {self.config.api_type} is not supported")
 
@@ -85,6 +89,8 @@ class LLMApi(object):
             self._set_embedding_service(QWenService)
         elif self.config.embedding_api_type == "zhipuai":
             self._set_embedding_service(ZhipuAIService)
+        elif self.config.embedding_api_type == "harvest":
+            self._set_embedding_service(HarvestService)
         elif self.config.embedding_api_type == "azure_ml":
             self.embedding_service = PlaceholderEmbeddingService(
                 "Azure ML does not support embeddings yet. Please configure a different embedding API.",
